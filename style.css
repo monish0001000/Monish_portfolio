@@ -6,7 +6,7 @@
 }
 
 html {
-    scroll-behavior: smooth;
+    /* scroll-behavior: smooth; Removed to prevent jitter with Lenis */
 }
 
 body {
