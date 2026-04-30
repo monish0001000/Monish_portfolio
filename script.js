@@ -357,53 +357,58 @@ document.addEventListener('DOMContentLoaded', () => {
             e.preventDefault();
 
             const btn = document.getElementById('submit-btn');
+            if (!btn) return;
+
             const originalText = btn.innerHTML;
 
-            // Hide any previous feedback
-            hideFeedback();
-
-            // UX: disable button + show spinner
-            btn.innerHTML = '<i class="fas fa-spinner" style="animation: spin 1s linear infinite;"></i> Sending...';
-            btn.disabled = true;
-
-            // Collect form values
-            const formData = new FormData(form);
-            const name = formData.get('name');
-            const email = formData.get('email');
-            const subject = formData.get('subject');
-            const message = formData.get('message');
-
-            // Build message in the exact required format (plain text)
-            const text = [
-                '📩 Monish_Portfolio Contact Form',
-                '=================================',
-                '',
-                `Name: ${name}`,
-                `Email: ${email}`,
-                `Subject: ${subject}`,
-                `Message: ${message}`,
-                '',
-                '================================='
-            ].join('\\n');
-
-            const BOT_TOKEN = import.meta.env.VITE_TELEGRAM_BOT_TOKEN;
-            const CHAT_ID = import.meta.env.VITE_TELEGRAM_CHAT_ID;
-
             try {
+                // Hide any previous feedback
+                hideFeedback();
+
+                // UX: disable button + show spinner
+                btn.innerHTML = '<i class="fas fa-spinner" style="animation: spin 1s linear infinite;"></i> Sending...';
+                btn.disabled = true;
+
+                // Collect form values
+                const formData = new FormData(form);
+                const name = formData.get('name') || 'Anonymous';
+                const email = formData.get('email') || 'No Email';
+                const subject = formData.get('subject') || 'No Subject';
+                const message = formData.get('message') || 'No Message';
+
+                // Build message in the exact required format (plain text)
+                const text = [
+                    '[📩 Monish_Portfolio Contact Form',
+                    '=================================',
+                    '',
+                    `Name: ${name}`,
+                    `Email: ${email}`,
+                    `Subject:${subject}`,
+                    `Message: ${message}`,
+                    '',
+                    '=================================]'
+                ].join('\n');
+
+                const BOT_TOKEN = import.meta.env.VITE_TELEGRAM_BOT_TOKEN;
+                const CHAT_ID = import.meta.env.VITE_TELEGRAM_CHAT_ID;
+
+                if (!BOT_TOKEN || !CHAT_ID) {
+                    throw new Error('Telegram configuration missing. Please ensure VITE_TELEGRAM_BOT_TOKEN and VITE_TELEGRAM_CHAT_ID are set in environment variables.');
+                }
+
                 const response = await fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({
                         chat_id: CHAT_ID,
                         text: text
-                        // No parse_mode → plain text (avoids Markdown/HTML conflicts)
                     })
                 });
 
                 const result = await response.json();
 
                 if (!response.ok || !result.ok) {
-                    throw new Error(result.description || 'Telegram API error');
+                    throw new Error(result.description || `Telegram API error: ${response.status}`);
                 }
 
                 // ✅ Confirmed delivery — show success
@@ -415,9 +420,28 @@ document.addEventListener('DOMContentLoaded', () => {
             } catch (error) {
                 // ❌ Network error or API rejection — show error
                 console.error('Contact form error:', error);
+                
+                // Provide a more user-friendly message if it's a fetch failure (likely adblock or network)
+                if (error.message.includes('Failed to fetch')) {
+                    if (errorBanner) {
+                        const span = errorBanner.querySelector('span');
+                        if (span) span.textContent = 'Network error. Please check your internet or disable ad-blockers.';
+                    }
+                } else if (error.message.includes('configuration missing')) {
+                    if (errorBanner) {
+                        const span = errorBanner.querySelector('span');
+                        if (span) span.textContent = 'Form configuration error. Please contact the site owner.';
+                    }
+                }
+
                 if (errorBanner) {
                     errorBanner.classList.add('visible');
-                    setTimeout(() => errorBanner.classList.remove('visible'), 5000);
+                    setTimeout(() => {
+                        errorBanner.classList.remove('visible');
+                        // Restore original error message for next attempt if we changed it
+                        const span = errorBanner.querySelector('span');
+                        if (span) span.textContent = 'Something went wrong. Please try again or email me directly.';
+                    }, 6000);
                 }
             } finally {
                 // Always restore button regardless of outcome
