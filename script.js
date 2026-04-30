@@ -376,39 +376,19 @@ document.addEventListener('DOMContentLoaded', () => {
                 const subject = formData.get('subject') || 'No Subject';
                 const message = formData.get('message') || 'No Message';
 
-                // Build message in the exact required format (plain text)
-                const text = [
-                    '[📩 Monish_Portfolio Contact Form',
-                    '=================================',
-                    '',
-                    `Name: ${name}`,
-                    `Email: ${email}`,
-                    `Subject:${subject}`,
-                    `Message: ${message}`,
-                    '',
-                    '=================================]'
-                ].join('\n');
+                // Build payload for secure backend
+                const payload = { name, email, subject, message };
 
-                const BOT_TOKEN = import.meta.env.VITE_TELEGRAM_BOT_TOKEN;
-                const CHAT_ID = import.meta.env.VITE_TELEGRAM_CHAT_ID;
-
-                if (!BOT_TOKEN || !CHAT_ID) {
-                    throw new Error('Telegram configuration missing. Please ensure VITE_TELEGRAM_BOT_TOKEN and VITE_TELEGRAM_CHAT_ID are set in environment variables.');
-                }
-
-                const response = await fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`, {
+                const response = await fetch('/api/contact', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({
-                        chat_id: CHAT_ID,
-                        text: text
-                    })
+                    body: JSON.stringify(payload)
                 });
 
                 const result = await response.json();
 
-                if (!response.ok || !result.ok) {
-                    throw new Error(result.description || `Telegram API error: ${response.status}`);
+                if (!response.ok) {
+                    throw new Error(result.error || `Server error: ${response.status}`);
                 }
 
                 // ✅ Confirmed delivery — show success
