@@ -1,3 +1,8 @@
+import gsap from 'gsap';
+import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import VanillaTilt from 'vanilla-tilt';
+import Lenis from '@studio-freight/lenis';
+
 // Wait for DOM content to load
 document.addEventListener('DOMContentLoaded', () => {
 
@@ -267,7 +272,7 @@ document.addEventListener('DOMContentLoaded', () => {
         });
 
         // Universal Scroll Reveals
-        const revealElements = document.querySelectorAll('.hero-left, .hero-right, .section-title, .about-text p, .stat-item, .skill-card, .project-card, .contact-info, .contact-form');
+        const revealElements = document.querySelectorAll('.hero-left, .hero-right, .section-title, .about-text p, .stat-item, .skill-card, .timeline-item, .project-card, .contact-info, .contact-form');
         revealElements.forEach(el => {
             gsap.fromTo(el,
                 { y: 30, opacity: 0 },
@@ -283,6 +288,22 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
             );
         });
+
+        // Timeline Line Growth Animation
+        gsap.fromTo('.timeline-line', 
+            { scaleY: 0 },
+            {
+                scaleY: 1,
+                transformOrigin: "top",
+                ease: "none",
+                scrollTrigger: {
+                    trigger: ".timeline",
+                    start: "top 80%",
+                    end: "bottom 20%",
+                    scrub: true
+                }
+            }
+        );
 
         // 3D Tilt Effect on cards
         if (typeof VanillaTilt !== 'undefined') {
