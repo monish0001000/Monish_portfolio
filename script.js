@@ -296,9 +296,6 @@ document.addEventListener('DOMContentLoaded', () => {
             });
         }
 
-        // Initialize Terminal Typewriter
-        initTerminal();
-
         // Counter Animation
         const counters = document.querySelectorAll('.counter');
         counters.forEach(counter => {
@@ -316,71 +313,6 @@ document.addEventListener('DOMContentLoaded', () => {
                 },
                 once: true
             });
-        });
-    }
-
-    // --- Terminal Typing Effect ---
-    function initTerminal() {
-        const terminalBody = document.getElementById('terminal-body');
-        const commands = [
-            "whoami",
-            "> Monish",
-            "> Role: Cybersecurity Student & Web Dev",
-            "cat education.txt",
-            "> B.E. CSE (Cybersecurity)",
-            "> Arunai Engineering College, 2023-2027",
-            "echo $STATUS",
-            "> Open to internships & collaborations",
-            "./execute_future.sh",
-            "> Loading..."
-        ];
-
-        let i = 0;
-        let c = 0;
-        let currentString = "";
-
-        function typeWriter() {
-            if (!terminalBody) return;
-            if (i < commands.length) {
-                if (c < commands[i].length) {
-                    currentString += commands[i].charAt(c);
-
-                    // Format output
-                    let html = "";
-                    for (let j = 0; j < i; j++) {
-                        let prefix = commands[j].startsWith(">") ? "" : "<span style='color:#27C93F'>$ </span>";
-                        let color = commands[j].startsWith(">") ? "#A0A0B0" : "#00F0FF";
-                        html += `<div>${prefix}<span style='color:${color}'>${commands[j]}</span></div>`;
-                    }
-
-                    let prefix = commands[i].startsWith(">") ? "" : "<span style='color:#27C93F'>$ </span>";
-                    let color = commands[i].startsWith(">") ? "#A0A0B0" : "#00F0FF";
-
-                    terminalBody.innerHTML = html + `<div>${prefix}<span style='color:${color}'>${currentString}</span><span style='animation: blink 1s step-end infinite;'>_</span></div>`;
-
-                    c++;
-                    setTimeout(typeWriter, Math.random() * 50 + 20);
-                } else {
-                    currentString = "";
-                    c = 0;
-                    i++;
-                    setTimeout(typeWriter, 500);
-                }
-            } else {
-                // Done
-                terminalBody.innerHTML = terminalBody.innerHTML.replace("<span style='animation: blink 1s step-end infinite;'>_</span>", "");
-                terminalBody.innerHTML += `<div><span style='color:#27C93F'>$ </span><span style='animation: blink 1s step-end infinite;'>_</span></div>`;
-            }
-        }
-
-        // Start typing when terminal comes into view
-        ScrollTrigger.create({
-            trigger: ".terminal-widget",
-            start: "top 80%",
-            onEnter: () => {
-                setTimeout(typeWriter, 500);
-            },
-            once: true
         });
     }
 
