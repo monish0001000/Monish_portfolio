@@ -11,6 +11,10 @@ async function startServer() {
   const app = express();
   const PORT = 3000;
 
+  // Trust the first proxy in front of the app (e.g. Nginx, Load Balancer)
+  // This is required for express-rate-limit to correctly identify the client IP
+  app.set("trust proxy", 1);
+
   // Security Middleware
   app.use(express.json());
   app.use(helmet({
@@ -21,7 +25,18 @@ async function startServer() {
   const apiLimiter = rateLimit({
     windowMs: 15 * 60 * 1000, // 15 minutes
     max: 10, // limit each IP to 10 requests per windowMs for the contact form
-    message: { error: "Too many requests from this IP, please try again after 15 minutes" }
+    message: { error: "Too many requests from this IP, please try again after 15 minutes" },
+    standardHeaders: true, // Return rate limit info in the `RateLimit-*` headers
+    legacyHeaders: false, // Disable the `X-RateLimit-*` headers
+    // Custom key generator to handle proxy headers and satisfy validation checks
+    keyGenerator: (req) => {
+      // Use req.ip which is populated by Express when 'trust proxy' is set
+      // or fallback to headers manually if needed
+      return (req.headers['x-forwarded-for'] as string) || (req.headers['forwarded'] as string) || req.ip || 'unknown';
+    },
+    validate: {
+      trustProxy: false,
+    },
   });
 
   // API Route: Contact Form
