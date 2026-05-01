@@ -86,6 +86,11 @@ async function startServer() {
     app.use(vite.middlewares);
   } else {
     const distPath = path.join(process.cwd(), 'dist');
+    const imagesPath = path.join(process.cwd(), 'images');
+    
+    // Serve the original images folder statically so PDF resume and unbundled assets are available
+    app.use('/images', express.static(imagesPath));
+    
     app.use(express.static(distPath));
     app.get('*', (req, res) => {
       res.sendFile(path.join(distPath, 'index.html'));
