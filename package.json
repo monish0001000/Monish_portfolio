@@ -23,6 +23,7 @@
     "helmet": "^8.1.0",
     "lucide-react": "^0.546.0",
     "motion": "^12.23.24",
+    "pdfkit": "^0.18.0",
     "react": "^19.0.1",
     "react-dom": "^19.0.1",
     "vanilla-tilt": "^1.8.1",

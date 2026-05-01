@@ -6,7 +6,8 @@
 }
 
 html {
-    /* scroll-behavior: smooth; Removed to prevent jitter with Lenis */
+    overflow-x: hidden;
+    width: 100%;
 }
 
 body {
@@ -15,6 +16,8 @@ body {
     color: #ffffff;
     background: #000000;
     overflow-x: hidden;
+    width: 100%;
+    position: relative;
 }
 
 /* Animated Background */
@@ -26,6 +29,7 @@ body {
     height: 100%;
     z-index: -1;
     background: radial-gradient(ellipse at center, #001122 0%, #000000 70%);
+    overflow: hidden;
 }
 
 .floating-particles {
@@ -169,6 +173,11 @@ body {
     box-shadow: 0 0 10px rgba(0, 212, 255, 0.3);
 }
 
+#home {
+    border-color: #000000;
+    color: #000000;
+}
+
 /* Hero Section */
 .hero {
     min-height: 100vh;
@@ -187,16 +196,16 @@ body {
 
 .hero-content {
     display: grid;
-    grid-template-columns: 1.15fr 0.85fr;
-    gap: 4rem;
+    grid-template-columns: 1.1fr 0.9fr;
+    gap: 3rem;
     align-items: center;
 }
 
 .hero-left {
-    animation: slideInLeft 1s ease-out;
-    padding-left: clamp(1rem, 6vw, 5rem);
-    border-left: 2px solid #000000;
-    margin-left: clamp(0.5rem, 3vw, 2rem);
+    padding-left: clamp(0.5rem, 4vw, 3rem);
+    border-left: 2px solid rgba(0, 212, 255, 0.3);
+    margin-left: 0;
+    border-color: #000000;
 }
 
 .hero-name {
@@ -209,6 +218,13 @@ body {
     background-clip: text;
     text-shadow: 0 0 30px rgba(0, 212, 255, 0.3);
     animation: glow 2s ease-in-out infinite alternate;
+    overflow-wrap: break-word;
+    word-wrap: break-word;
+}
+
+img {
+    max-width: 100%;
+    height: auto;
 }
 
 @keyframes glow {
@@ -337,7 +353,6 @@ body {
 .hero-right {
     display: flex;
     justify-content: center;
-    animation: slideInRight 1s ease-out;
 }
 
 .profile-frame {
@@ -396,8 +411,9 @@ body {
 
 /* Section Styles */
 section {
-    padding: 100px 0;
+    padding: 80px 0;
     position: relative;
+    overflow: hidden;
 }
 
 .section-title {
@@ -1043,10 +1059,63 @@ section {
 
 /* Navigation Responsive */
 @media screen and (max-width: 1024px) {
+    .hero-container {
+        padding: 0 1rem;
+        overflow: hidden;
+    }
+
     .hero-content {
+        grid-template-columns: 1fr;
         gap: 2rem;
+        text-align: center;
+        width: 100%;
+        max-width: 100%;
+        overflow: hidden;
     }
     
+    .hero-left {
+        padding-left: 0;
+        border-left: none;
+        margin-left: 0;
+        width: 100%;
+        max-width: 100%;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .hero-name {
+        font-size: clamp(2rem, 10vw, 3.5rem);
+        width: 100%;
+    }
+
+    .hero-title {
+        font-size: clamp(1rem, 5vw, 1.5rem);
+    }
+
+    .hero-description {
+        width: 100%;
+        max-width: 100%;
+    }
+
+    .hero-right {
+        order: -1;
+        width: 100%;
+        display: flex;
+        justify-content: center;
+    }
+
+    .social-links {
+        justify-content: center;
+        width: 100%;
+        flex-wrap: wrap;
+    }
+
+    .hero-buttons {
+        justify-content: center;
+        width: 100%;
+    }
+
     .contact-content,
     .about-content {
         grid-template-columns: 1fr;
@@ -1112,31 +1181,6 @@ section {
     /* Hero Section */
     .hero {
         padding: 80px 0 40px;
-    }
-
-    .hero-content {
-        grid-template-columns: 1fr;
-        gap: 2.5rem;
-        text-align: center;
-    }
-
-    .hero-left {
-        padding-left: 0;
-        border-left: none;
-        margin-left: 0;
-    }
-
-    .hero-name {
-        font-size: 3rem;
-    }
-
-    .hero-title {
-        font-size: 1.5rem;
-    }
-
-    .social-links {
-        justify-content: center;
-        margin-top: 1rem;
     }
 
     .hero-buttons {
@@ -1210,17 +1254,17 @@ section {
 
     /* Timeline Mobile */
     .timeline-line {
-        left: 31px;
+        left: 20px;
     }
 
     .timeline-item {
         width: 100%;
-        padding-left: 70px;
-        padding-right: 25px;
+        padding-left: 50px;
+        padding-right: 15px;
     }
 
     .timeline-item::after {
-        left: 21px;
+        left: 10px;
         right: auto;
     }
 

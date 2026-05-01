@@ -62,6 +62,10 @@ document.addEventListener('DOMContentLoaded', () => {
                         onComplete: () => {
                             preloader.style.display = 'none';
                             initAnimations();
+                            // Refresh GSAP ScrollTrigger to recalculate positions correctly
+                            setTimeout(() => {
+                                ScrollTrigger.refresh();
+                            }, 500);
                         }
                     });
                 }, 500);
@@ -272,7 +276,18 @@ document.addEventListener('DOMContentLoaded', () => {
         });
 
         // Universal Scroll Reveals
-        const revealElements = document.querySelectorAll('.hero-left, .hero-right, .section-title, .about-text p, .stat-item, .skill-card, .timeline-item, .project-card, .contact-info, .contact-form');
+        const revealElements = document.querySelectorAll('.section-title, .about-text p, .stat-item, .skill-card, .timeline-item, .project-card, .contact-info, .contact-form');
+        
+        // Initial hero animations (no scroll trigger needed since they are at the top)
+        gsap.fromTo(['.hero-left', '.hero-right'],
+            { y: 30, opacity: 0 },
+            {
+                y: 0, opacity: 1,
+                duration: 0.8,
+                stagger: 0.2,
+                ease: "power3.out"
+            }
+        );
         revealElements.forEach(el => {
             gsap.fromTo(el,
                 { y: 30, opacity: 0 },

@@ -28,15 +28,6 @@ async function startServer() {
     message: { error: "Too many requests from this IP, please try again after 15 minutes" },
     standardHeaders: true, // Return rate limit info in the `RateLimit-*` headers
     legacyHeaders: false, // Disable the `X-RateLimit-*` headers
-    // Custom key generator to handle proxy headers and satisfy validation checks
-    keyGenerator: (req) => {
-      // Use req.ip which is populated by Express when 'trust proxy' is set
-      // or fallback to headers manually if needed
-      return (req.headers['x-forwarded-for'] as string) || (req.headers['forwarded'] as string) || req.ip || 'unknown';
-    },
-    validate: {
-      trustProxy: false,
-    },
   });
 
   // API Route: Contact Form
