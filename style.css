@@ -1,3 +1,108 @@
+/* Preloader Terminal */
+.preloader {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: #000;
+    z-index: 9999;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.terminal-loader {
+    width: 90%;
+    max-width: 650px;
+    background: rgba(0, 10, 20, 0.95);
+    border: 1px solid rgba(0, 212, 255, 0.3);
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 10px 40px rgba(0, 212, 255, 0.15), 0 0 15px rgba(0, 212, 255, 0.05);
+    font-family: 'Courier New', Courier, monospace;
+}
+
+.terminal-header {
+    background: rgba(0, 5, 10, 0.8);
+    padding: 12px 15px;
+    border-bottom: 1px solid rgba(0, 212, 255, 0.1);
+    display: flex;
+    align-items: center;
+}
+
+.terminal-btn {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    margin-right: 8px;
+    display: inline-block;
+    opacity: 0.8;
+}
+
+.terminal-btn.close { background: #ff5f56; }
+.terminal-btn.min { background: #ffbd2e; }
+.terminal-btn.max { background: #27c93f; }
+
+.terminal-title {
+    color: rgba(0, 212, 255, 0.7);
+    margin-left: 10px;
+    font-size: 0.85rem;
+    letter-spacing: 1px;
+}
+
+.terminal-text {
+    padding: 25px;
+    color: #e0e0e0;
+    font-size: 1.1rem;
+    min-height: 160px;
+}
+
+.prompt {
+    color: #00d4ff;
+    margin-right: 10px;
+    font-weight: bold;
+}
+
+.progress-bar-container {
+    width: 100%;
+    height: 2px;
+    background: rgba(0, 212, 255, 0.1);
+    margin: 20px 0;
+    border-radius: 2px;
+    overflow: hidden;
+}
+
+.progress-bar {
+    width: 0%;
+    height: 100%;
+    background: #00d4ff;
+    box-shadow: 0 0 10px #00d4ff, 0 0 20px #00d4ff;
+    transition: width 0.05s ease;
+}
+
+.terminal-status {
+    color: rgba(0, 212, 255, 0.6);
+    font-size: 0.85rem;
+    letter-spacing: 1px;
+    animation: blink 1s infinite alternate;
+}
+
+/* Cursor and typewrite */
+.cursor {
+    display: inline-block;
+    width: 10px;
+    color: #00d4ff;
+    font-weight: bold;
+    animation: blink 1s infinite step-end;
+}
+
+.typewrite {
+    color: #ffffff;
+    text-shadow: none;
+    animation: none;
+}
+
 /* Reset and Base Styles */
 * {
     margin: 0;

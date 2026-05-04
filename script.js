@@ -6,9 +6,16 @@ import Lenis from '@studio-freight/lenis';
 // Wait for DOM content to load
 document.addEventListener('DOMContentLoaded', () => {
 
+    // Prevent browser from restoring previous scroll position which causes glitches
+    if ('scrollRestoration' in history) {
+        history.scrollRestoration = 'manual';
+    }
+    window.scrollTo(0, 0);
+
     // --- Smooth Scrolling (Lenis) ---
+    let lenis;
     if (typeof Lenis !== 'undefined') {
-        const lenis = new Lenis({
+        lenis = new Lenis({
             duration: 1.2,
             easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
             direction: 'vertical',
@@ -51,24 +58,24 @@ document.addEventListener('DOMContentLoaded', () => {
             bar.style.width = count + '%';
 
             if (count < 100) {
-                setTimeout(updateCounter, Math.random() * 50 + 20);
+                setTimeout(updateCounter, Math.random() * 5 + 2); // Ultra fast preloader
             } else {
                 // Loading complete
                 setTimeout(() => {
+                    initAnimations(); // Initialize elements to their starting opacity/position immediately
                     gsap.to(preloader, {
-                        yPercent: -100,
-                        duration: 1,
-                        ease: "power4.inOut",
+                        opacity: 0,
+                        duration: 1.2,
+                        ease: "power2.inOut",
                         onComplete: () => {
                             preloader.style.display = 'none';
-                            initAnimations();
                             // Refresh GSAP ScrollTrigger to recalculate positions correctly
                             setTimeout(() => {
                                 ScrollTrigger.refresh();
                             }, 500);
                         }
                     });
-                }, 500);
+                }, 400);
             }
         };
 
@@ -191,7 +198,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         const initParticles = () => {
             particles = [];
-            const particleCount = window.innerWidth < 768 ? 50 : 120;
+            const particleCount = window.innerWidth < 768 ? 15 : 60; // Optimized for mobile
             for (let i = 0; i < particleCount; i++) {
                 particles.push(new Particle());
             }
@@ -230,10 +237,46 @@ document.addEventListener('DOMContentLoaded', () => {
         animateParticles();
     }
 
-    // --- Navigation & Mobile Menu ---
+    // --- Nav Menu (Hamburger) ---
     const navbar = document.getElementById('navbar');
     const hamburger = document.getElementById('hamburger');
     const navMenu = document.getElementById('nav-menu');
+
+    // --- Typewriter Effect ---
+    const typewriterElement = document.querySelector('.typewrite');
+    if (typewriterElement) {
+        const words = JSON.parse(typewriterElement.getAttribute('data-words'));
+        let wordIndex = 0;
+        let charIndex = 0;
+        let isDeleting = false;
+
+        const type = () => {
+            const currentWord = words[wordIndex];
+            
+            if (isDeleting) {
+                charIndex--;
+            } else {
+                charIndex++;
+            }
+
+            typewriterElement.textContent = currentWord.substring(0, charIndex);
+
+            let typeSpeed = isDeleting ? 30 : 60;
+
+            if (!isDeleting && charIndex === currentWord.length) {
+                typeSpeed = 1500; // Pause at end of word
+                isDeleting = true;
+            } else if (isDeleting && charIndex === 0) {
+                isDeleting = false;
+                wordIndex = (wordIndex + 1) % words.length;
+                typeSpeed = 300; // Pause before next word
+            }
+
+            setTimeout(type, typeSpeed);
+        };
+
+        type();
+    }
 
     if (navbar) {
         window.addEventListener('scroll', () => {
@@ -252,9 +295,32 @@ document.addEventListener('DOMContentLoaded', () => {
         });
 
         navMenu.querySelectorAll('.nav-link').forEach(link => {
-            link.addEventListener('click', () => {
+            link.addEventListener('click', (e) => {
+                e.preventDefault();
                 hamburger.classList.remove('active');
                 navMenu.classList.remove('active');
+                
+                const targetId = link.getAttribute('href');
+                if (targetId && targetId.startsWith('#')) {
+                    const targetElement = document.querySelector(targetId);
+                    if (targetElement) {
+                        if (typeof lenis !== 'undefined' && lenis) {
+                            lenis.scrollTo(targetElement, {
+                                offset: -80, // adjust for navbar height
+                                duration: 1.5,
+                                easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t))
+                            });
+                        } else {
+                            // Fallback
+                            const elementPosition = targetElement.getBoundingClientRect().top;
+                            const offsetPosition = elementPosition + window.pageYOffset - 80;
+                            window.scrollTo({
+                                top: offsetPosition,
+                                behavior: "smooth"
+                            });
+                        }
+                    }
+                }
             });
         });
     }
@@ -283,7 +349,8 @@ document.addEventListener('DOMContentLoaded', () => {
             { y: 30, opacity: 0 },
             {
                 y: 0, opacity: 1,
-                duration: 0.8,
+                duration: 1,
+                delay: 0.6,
                 stagger: 0.2,
                 ease: "power3.out"
             }

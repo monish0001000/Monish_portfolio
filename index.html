@@ -13,6 +13,24 @@
 </head>
 
 <body>
+    <div id="preloader" class="preloader">
+        <div class="terminal-loader">
+            <div class="terminal-header">
+                <span class="terminal-btn close"></span>
+                <span class="terminal-btn min"></span>
+                <span class="terminal-btn max"></span>
+                <span class="terminal-title">boot_sequence.exe</span>
+            </div>
+            <div id="terminal-text" class="terminal-text">
+                <p><span class="prompt">[root@monish:~]#</span> initializing system... <span id="preloader-counter">0</span>%</p>
+                <div class="progress-bar-container">
+                    <div id="preloader-bar" class="progress-bar"></div>
+                </div>
+                <p class="terminal-status" id="terminal-status">loading core modules...</p>
+            </div>
+        </div>
+    </div>
+
     <div id="app-wrapper" style="overflow-x: hidden; position: relative; width: 100%;">
 
     <div class="animated-bg">
@@ -24,7 +42,7 @@
     <nav class="navbar" id="navbar">
         <div class="nav-container">
             <div class="nav-logo">
-                <span class="logo-text">Portfolio</span>
+                <img src="./images/logo.png" alt="Monix Logo" class="header-logo" style="height: 40px; width: auto; object-fit: contain;">
             </div>
             <ul class="nav-menu" id="nav-menu">
                 <li class="nav-item">
@@ -60,11 +78,11 @@
             <div class="hero-content">
                 <div class="hero-left">
                     <h1 class="hero-name">MONISH</h1>
-                    <h2 class="hero-title">A Cybersecurity Student</h2>
+                    <h2 class="hero-title">A Cybersecurity <span class="typewrite" data-words='["Student", "AI Engineer", "Enthusiast", "Researcher"]'>Student</span><span class="cursor">_</span></h2>
                     <p class="hero-description">Building secure digital futures, one line of code at a time.</p>
 
                     <div class="hero-buttons">
-                        <a href="https://drive.google.com/file/d/1FnZVYmAoYy0TUMSHl6orsFaI_EFOBykX/view?usp=sharing" target="_blank" class="btn-primary">
+                        <a href="https://docs.google.com/document/d/1i9KkLhwY_-clcZDG3t421WTx6VA18zlFS437nlebkeo/edit?usp=sharing" target="_blank" class="btn-primary">
                             <i class="fas fa-download"></i>
                             Download Resume
                         </a>
@@ -268,6 +286,27 @@
                         <h3>MONIX Web-OS</h3>
                         <p>A comprehensive, browser-based cloud operating system featuring a custom Virtual File System (VFS), P2P multiplayer ecosystem, and integrated AURA Voice AI.</p>
                         <a href="https://monix--web-os.vercel.app" target="_blank" class="btn-secondary">View Project</a>
+                    </div>
+                </div>
+
+                <div class="project-card glass-card">
+                    <div class="project-image">
+                        <img src="./images/awareness.png" alt="Awareness Simulator">
+                        <div class="project-overlay">
+                            <div class="project-links">
+                                <a href="https://awareness-simulator.vercel.app/" target="_blank" class="project-link">
+                                    <i class="fas fa-external-link-alt"></i>
+                                </a>
+                                <a href="#" class="project-link">
+                                    <i class="fab fa-github"></i>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="project-content">
+                        <h3>Social Engineering Awareness Simulator</h3>
+                        <p>Interactive educational platform exposing sophisticated attacks. Features an "Attack Anatomy" module visualizing silent exfiltration of camera feeds, GPS, and device fingerprints with a Cyber-Dark UI.</p>
+                        <a href="https://awareness-simulator.vercel.app/" target="_blank" class="btn-secondary">View Project</a>
                     </div>
                 </div>
 
