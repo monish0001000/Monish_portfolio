@@ -43,46 +43,96 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    // --- Preloader Logic ---
+    // --- Cinematic Preloader Sequence ---
     const preloader = document.getElementById('preloader');
-    const counter = document.getElementById('preloader-counter');
-    const bar = document.getElementById('preloader-bar');
+    const appWrapper = document.getElementById('app-wrapper');
+    const logoContainer = document.querySelector('.logo-container');
 
-    if (preloader && counter && bar) {
-        let count = 0;
-        const updateCounter = () => {
-            count += Math.floor(Math.random() * 10) + 1;
-            if (count > 100) count = 100;
+    const runBootSequence = () => {
+        const tl = gsap.timeline();
 
-            counter.textContent = count;
-            bar.style.width = count + '%';
+        // Initial states
+        gsap.set(appWrapper, { opacity: 0, y: 30 });
+        gsap.set(logoContainer, { opacity: 0, scale: 1 });
+        gsap.set(preloader, { opacity: 1, display: 'flex' });
 
-            if (count < 100) {
-                setTimeout(updateCounter, Math.random() * 5 + 2); // Ultra fast preloader
-            } else {
-                // Loading complete
+        // Cinematic Zoom: Slowly scales the logo from 1.0 to 1.15 throughout the sequence
+        tl.to(logoContainer, {
+            scale: 1.15,
+            duration: 4.0, // Spans the full sequence duration
+            ease: "sine.inOut" // Smooth constant feel
+        }, 0);
+
+        tl.to(logoContainer, {
+            opacity: 1,
+            duration: 1.2,
+            ease: "power2.inOut"
+        }, 0)
+        .to(preloader, {
+            opacity: 0,
+            duration: 1.5,
+            ease: "power3.inOut",
+            delay: 1.3, // Hold the logo visible (1.2 + 1.3 + 1.5 = 4s total)
+            onComplete: () => {
+                preloader.style.display = 'none';
+                // Refresh GSAP ScrollTrigger to recalculate positions correctly
                 setTimeout(() => {
-                    initAnimations(); // Initialize elements to their starting opacity/position immediately
-                    gsap.to(preloader, {
-                        opacity: 0,
-                        duration: 1.2,
-                        ease: "power2.inOut",
-                        onComplete: () => {
-                            preloader.style.display = 'none';
-                            // Refresh GSAP ScrollTrigger to recalculate positions correctly
-                            setTimeout(() => {
-                                ScrollTrigger.refresh();
-                            }, 500);
-                        }
-                    });
-                }, 400);
+                    ScrollTrigger.refresh();
+                }, 500);
             }
+        }, "-=0.3")
+        .to(appWrapper, {
+            opacity: 1,
+            y: 0,
+            duration: 1.2,
+            ease: "power4.out",
+            clearProps: "all",
+            onStart: () => {
+                initAnimations();
+            }
+        }, "-=0.8");
+
+        // --- Asset Preloading ---
+        const criticalAssets = [
+            './images/boot-logo.webp',
+            './images/logo.png',
+            './images/img.webp',
+            './images/Homepage.webp'
+        ];
+        
+        let loadedCount = 0;
+        const totalAssets = criticalAssets.length;
+        let preloadingFinished = false;
+
+        const finishPreloading = () => {
+            if (preloadingFinished) return;
+            preloadingFinished = true;
+            // The timeline continues automatically, but we ensure preloading is tracked.
         };
 
-        updateCounter();
+        criticalAssets.forEach(src => {
+            const img = new Image();
+            img.src = src;
+            img.onload = () => {
+                loadedCount++;
+                if (loadedCount === totalAssets) finishPreloading();
+            };
+            img.onerror = () => {
+                loadedCount++;
+                if (loadedCount === totalAssets) finishPreloading();
+            };
+        });
+
+        // 4-second safety timeout for preloading
+        setTimeout(finishPreloading, 4000);
+    };
+
+    if (preloader && logoContainer) {
+        runBootSequence();
     } else {
-        // Fallback if preloader elements don't exist
-        setTimeout(initAnimations, 100);
+        // Fallback
+        gsap.set(appWrapper, { opacity: 1, y: 0 });
+        initAnimations();
     }
 
     // --- Custom Cursor & Magnetic Effect ---
@@ -350,7 +400,7 @@ document.addEventListener('DOMContentLoaded', () => {
             {
                 y: 0, opacity: 1,
                 duration: 1,
-                delay: 0.6,
+                delay: 0.2,
                 stagger: 0.2,
                 ease: "power3.out"
             }

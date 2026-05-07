@@ -13,25 +13,13 @@
 </head>
 
 <body>
-    <div id="preloader" class="preloader">
-        <div class="terminal-loader">
-            <div class="terminal-header">
-                <span class="terminal-btn close"></span>
-                <span class="terminal-btn min"></span>
-                <span class="terminal-btn max"></span>
-                <span class="terminal-title">boot_sequence.exe</span>
-            </div>
-            <div id="terminal-text" class="terminal-text">
-                <p><span class="prompt">[root@monish:~]#</span> initializing system... <span id="preloader-counter">0</span>%</p>
-                <div class="progress-bar-container">
-                    <div id="preloader-bar" class="progress-bar"></div>
-                </div>
-                <p class="terminal-status" id="terminal-status">loading core modules...</p>
-            </div>
+    <div id="preloader" class="cinematic-preloader">
+        <div class="logo-container">
+            <img src="./images/boot-logo.webp" alt="Logo" class="boot-logo">
         </div>
     </div>
 
-    <div id="app-wrapper" style="overflow-x: hidden; position: relative; width: 100%;">
+    <div id="app-wrapper" style="overflow-x: hidden; position: relative; width: 100%; opacity: 0;">
 
     <div class="animated-bg">
         <div class="floating-particles"></div>
