@@ -54,6 +54,29 @@
     box-sizing: border-box;
 }
 
+/* Hide Scrollbar for all browsers */
+::-webkit-scrollbar {
+    display: none;
+}
+
+* {
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+}
+
+/* Vertical Scroll Progress Line */
+#scroll-progress {
+    position: fixed;
+    top: 0;
+    right: 0;
+    width: 4px;
+    height: 0%;
+    background: linear-gradient(to bottom, #00d4ff, #005f73);
+    box-shadow: 0 0 15px rgba(0, 212, 255, 0.6);
+    z-index: 10000;
+    pointer-events: none;
+}
+
 html {
     overflow-x: hidden;
     width: 100%;

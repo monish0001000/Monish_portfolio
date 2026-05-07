@@ -391,6 +391,18 @@ document.addEventListener('DOMContentLoaded', () => {
     function initAnimations() {
         gsap.registerPlugin(ScrollTrigger);
 
+        // Vertical Scroll Progress Line Expansion
+        gsap.to('#scroll-progress', {
+            height: "100%",
+            ease: "none",
+            scrollTrigger: {
+                trigger: "body",
+                start: "top top",
+                end: "bottom bottom",
+                scrub: true
+            }
+        });
+
         // Parallax Background
         gsap.to('.animated-bg', {
             y: "15%",
