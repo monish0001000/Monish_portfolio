@@ -107,7 +107,7 @@ document.addEventListener('DOMContentLoaded', () => {
         // --- Asset Preloading ---
         const criticalAssets = [
             './images/boot-logo.webp',
-            './images/logo.png',
+            './images/logo.webp',
             './images/img.webp',
             './images/Homepage.webp'
         ];
