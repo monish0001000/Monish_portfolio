@@ -61,20 +61,20 @@ document.addEventListener('DOMContentLoaded', () => {
         // Cinematic Zoom: Slowly scales the logo from 1.0 to 1.15 throughout the sequence
         tl.to(logoContainer, {
             scale: 1.15,
-            duration: 4.0, // Spans the full sequence duration
+            duration: 3.0, // Spans the full sequence duration
             ease: "sine.inOut" // Smooth constant feel
         }, 0);
 
         tl.to(logoContainer, {
             opacity: 1,
-            duration: 1.2,
+            duration: 0.8,
             ease: "power2.inOut"
         }, 0)
         .to(preloader, {
             opacity: 0,
-            duration: 1.5,
+            duration: 1.2,
             ease: "power3.inOut",
-            delay: 1.3, // Hold the logo visible (1.2 + 1.3 + 1.5 = 4s total)
+            delay: 1.3, // Adjusted to fit 3s sequence ( (0.8-0.3) + 1.3 + 1.2 = 3.0s )
             onComplete: () => {
                 preloader.style.display = 'none';
             }
