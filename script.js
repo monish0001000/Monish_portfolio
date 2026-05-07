@@ -41,6 +41,8 @@ document.addEventListener('DOMContentLoaded', () => {
             });
             gsap.ticker.lagSmoothing(0);
         }
+        // Stop Lenis initially during the preloader
+        lenis.stop();
     }
 
     // --- Cinematic Preloader Sequence ---
@@ -75,10 +77,6 @@ document.addEventListener('DOMContentLoaded', () => {
             delay: 1.3, // Hold the logo visible (1.2 + 1.3 + 1.5 = 4s total)
             onComplete: () => {
                 preloader.style.display = 'none';
-                // Refresh GSAP ScrollTrigger to recalculate positions correctly
-                setTimeout(() => {
-                    ScrollTrigger.refresh();
-                }, 500);
             }
         }, "-=0.3")
         .to(appWrapper, {
@@ -86,9 +84,23 @@ document.addEventListener('DOMContentLoaded', () => {
             y: 0,
             duration: 1.2,
             ease: "power4.out",
-            clearProps: "all",
             onStart: () => {
                 initAnimations();
+            },
+            onComplete: () => {
+                // Clear props except what's needed, but better to keep it clean
+                gsap.set(appWrapper, { clearProps: "y" });
+                
+                // Finally allow scrolling
+                document.body.classList.remove('no-scroll');
+                
+                // Refresh GSAP ScrollTrigger to recalculate positions correctly now that height is stable
+                ScrollTrigger.refresh();
+                
+                // If using Lenis, tell it to resize/start
+                if (lenis) {
+                    lenis.start();
+                }
             }
         }, "-=0.8");
 

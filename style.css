@@ -69,6 +69,11 @@ body {
     position: relative;
 }
 
+body.no-scroll {
+    overflow: hidden !important;
+    height: 100vh;
+}
+
 /* Animated Background */
 .animated-bg {
     position: fixed;
